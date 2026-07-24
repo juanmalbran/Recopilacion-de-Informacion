@@ -64,6 +64,17 @@ Grafo de relaciones con Maltego para identificar personal vinculado al dominio, 
 
 ---
 
+## Herramienta propia — [`recon.sh`](recon.sh)
+
+Script de automatización que encadena todo el footprinting y fingerprinting en un solo comando: instala/actualiza las herramientas necesarias (`update()`), y luego (`recon <dominio>`) corre en secuencia shuffledns → cero → katana → analyticsrelationships → gau → ctfr, deduplica y filtra los subdominios encontrados, valida cuáles están vivos con httpx, expande con alterx, y por cada subdominio activo ejecuta automáticamente masscan, wafw00f, testssl, ffuf, whatweb, nuclei y spoofcheck, dejando todo organizado en carpetas por fecha.
+
+```bash
+./recon.sh update              # instala/actualiza las herramientas
+./recon.sh mercadolibre.com     # corre el reconocimiento completo
+```
+
+---
+
 ## Stack
 
 `shuffledns` · `httpx` · `masscan` · `gowitness` · `wafw00f` · `nuclei` · `subzy` · `Qualys SSL Labs` · `Maltego` · `HaveIBeenPwned` · `exiftool` · `ffuf`
