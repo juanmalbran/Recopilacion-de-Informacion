@@ -11,7 +11,7 @@
 
 ## Sobre este módulo
 
-Antes de cualquier ataque o auditoría hay que **conocer al objetivo**. El reconocimiento avanza de lo menos intrusivo (fuentes públicas que no tocan al objetivo) a lo más intrusivo (interacción directa que deja rastro), estrechando el foco hasta un listado priorizado de objetivos.
+Antes de cualquier ataque o auditoría hay que **conocer al objetivo**. Esto es **OSINT** (*Open Source Intelligence*: reunir información del objetivo desde fuentes públicas) y **reconocimiento**: se avanza de lo menos intrusivo (fuentes que no tocan al objetivo) a lo más intrusivo (interacción directa que deja rastro), estrechando el foco hasta un listado priorizado de objetivos.
 
 **Temas cubiertos:** footprinting pasivo y activo · reconocimiento horizontal y vertical · fingerprinting · análisis de vulnerabilidades · OSINT sobre personas y organizaciones · mapeo a MITRE ATT&CK (fase Reconnaissance).
 
@@ -25,9 +25,9 @@ De la huella pública al mapa de la superficie de ataque. Cuanto más a la derec
 
 ---
 
-## Práctica — Reconocimiento de Mercado Libre (programa público en HackerOne)
+## Práctica — Reconocimiento sobre un programa público de Bug Bounty
 
-Informe de inteligencia completo sobre `*.mercadolibre.com` (scope autorizado, HackerOne), aplicando las cuatro fases del módulo de principio a fin.
+Informe de inteligencia completo sobre una **plataforma de e-commerce de gran escala** (programa público de bug bounty en HackerOne, dentro de scope autorizado), aplicando las cuatro fases del módulo de principio a fin. Los activos concretos (subdominios, nombres) se omiten deliberadamente: el foco está en la **metodología, no en el objetivo**.
 
 ### Footprinting — de 0 a 51 subdominios
 
@@ -35,16 +35,16 @@ DNS brute force con doble diccionario (`shuffledns`, 4.6K y 110K términos), cor
 
 ### Fingerprinting — arquitectura y hallazgo crítico
 
-Validación de hosts vivos (`httpx`), escaneo de los 10.000 puertos más comunes (`masscan` — solo 80/443 abiertos, consistente con arquitectura cloud detrás de balanceadores), capturas y stack tecnológico (`gowitness` — AWS + CloudFront + Tengine/Nginx, backend Rails, SSO Okta) y detección de WAF (`wafw00f` — CloudFront, ALB, Cloudflare, Akamai, Fastly según subdominio).
+Validación de hosts vivos (`httpx`), escaneo de los 10.000 puertos más comunes (`masscan` — solo 80/443 abiertos, consistente con arquitectura cloud detrás de balanceadores), capturas y stack tecnológico (`gowitness` — AWS + CloudFront + Tengine/Nginx, backend Rails, SSO Okta) y detección de **WAF** (`wafw00f` — el *Web Application Firewall* es el escudo que filtra el tráfico malicioso antes de que llegue a la web; se identificaron CloudFront, ALB, Cloudflare, Akamai y Fastly según subdominio).
 
-**Hallazgo de mayor severidad:** `artifacts.mercadolibre.com` exponía públicamente una instancia de **Sonatype Nexus Repository** con artefactos internos descargables (dependencias Android/iOS, SDKs de MercadoPago relacionados con `CardToken`), y metadatos que confirmaban su uso en pipelines de CI. Este tipo de exposición puede filtrar arquitectura interna de desarrollo y lógica de procesamiento de pagos.
+**Hallazgo de mayor severidad:** un subdominio exponía públicamente una instancia de **Sonatype Nexus Repository** con artefactos internos descargables (dependencias móviles, SDKs de pagos) y metadatos que confirmaban su uso en pipelines de CI. Este tipo de exposición puede filtrar arquitectura interna de desarrollo y lógica de procesamiento de pagos.
 
 ### Análisis de vulnerabilidades — nuclei, takeover, TLS, email
 
 - **nuclei:** sin vulnerabilidades críticas; hallazgos informativos (headers de seguridad ausentes, stack tecnológico expuesto).
-- **Subdomain takeover (`subzy`):** dos candidatos evaluados manualmente — un **dangling DNS real hacia SendGrid** (`url8202.mercadolibre.com`, riesgo medio-alto si el recurso ya no está reclamado) y un falso positivo descartado (protegido por AWS ALB).
+- **Subdomain takeover (`subzy`):** dos candidatos evaluados manualmente — un **dangling DNS real hacia SendGrid** (un registro DNS que sigue apuntando a un servicio externo ya no reclamado; si un atacante reclama ese recurso, se queda con el subdominio — riesgo medio-alto) y un falso positivo descartado (protegido por AWS ALB).
 - **SSL/TLS (Qualys SSL Labs):** configuración sólida — TLS 1.2/1.3 únicamente, Forward Secrecy, HSTS, sin Heartbleed/POODLE/ROBOT; observaciones menores (cipher suites CBC, sin OCSP Stapling).
-- **DMARC/SPF/DKIM:** `p=reject` — la política más estricta posible. Mercado Libre **no es vulnerable a email spoofing**.
+- **DMARC/SPF/DKIM** (los tres mecanismos que autentican el correo de un dominio para que nadie pueda suplantarlo)**:** `p=reject` — la política más estricta posible. El objetivo **no es vulnerable a email spoofing** (falsificación de remitente).
 
 ### OSINT — personas y metadatos
 
@@ -70,7 +70,7 @@ Script de automatización que encadena todo el footprinting y fingerprinting en 
 
 ```bash
 ./recon.sh update              # instala/actualiza las herramientas
-./recon.sh mercadolibre.com     # corre el reconocimiento completo
+./recon.sh target.com           # corre el reconocimiento completo
 ```
 
 ---
