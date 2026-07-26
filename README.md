@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/OSINT-58A6FF?style=flat-square" />
-  <img src="https://img.shields.io/badge/Nmap-4682B4?style=flat-square&logo=nmap&logoColor=white" />
+  <img src="https://img.shields.io/badge/masscan-4682B4?style=flat-square" />
   <img src="https://img.shields.io/badge/Nuclei-00ADD8?style=flat-square" />
   <img src="https://img.shields.io/badge/Maltego-1a1a2e?style=flat-square" />
 </p>
@@ -48,7 +48,7 @@ Validación de hosts vivos (`httpx`), escaneo de los 10.000 puertos más comunes
 
 ### OSINT — personas y metadatos
 
-Grafo de relaciones con Maltego para identificar personal vinculado al dominio, cruce con HaveIBeenPwned sobre un correo corporativo (múltiples brechas de terceros confirmadas para esa dirección), Google Dorking para mapear cargos clave en LinkedIn, y extracción de metadatos (`exiftool`) de documentos públicos del CDN (autor, software de producción, fechas) — todo con foco en qué expone a la organización a phishing dirigido, sin publicar datos personales identificables de terceros.
+Grafo de relaciones con Maltego para identificar personal vinculado al dominio, cruce con HaveIBeenPwned sobre un correo corporativo (múltiples brechas de terceros confirmadas para esa dirección), Google Dorking (búsquedas avanzadas con operadores de Google para encontrar información expuesta) para mapear cargos clave en LinkedIn, y extracción de metadatos (`exiftool`) de documentos públicos del CDN (autor, software de producción, fechas) — todo con foco en qué expone a la organización a phishing dirigido, sin publicar datos personales identificables de terceros.
 
 ### Resumen de severidad
 
@@ -88,7 +88,7 @@ Script de automatización que encadena todo el footprinting y fingerprinting en 
 - [x] Hallazgo de severidad alta identificado y documentado con evidencia (Nexus Repository expuesto)
 - [x] Vulnerabilidad de subdomain takeover distinguida correctamente de un falso positivo
 - [x] Auditoría SSL/TLS y de autenticación de correo (DMARC/SPF/DKIM) completa
-- [x] OSINT sobre personas y metadatos documentos, con foco en riesgo organizacional, no en exposición de terceros
+- [x] OSINT sobre personas y metadatos de documentos, con foco en riesgo organizacional, no en exposición de terceros
 
 ---
 
